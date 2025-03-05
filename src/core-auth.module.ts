@@ -6,7 +6,7 @@ import { TokenService } from 'smp-core-auth';
 import { CacheService } from 'smp-core-auth';
 import { GRPCService } from 'smp-core-auth';
 import { AuthService } from 'smp-core-auth';
-import { TokenBlacklist } from 'smp-core-auth';
+import { JWTManager } from 'smp-core-auth';
 
 /**
  * CoreAuthModule integrates the core authentication library into a NestJS application.
@@ -17,31 +17,7 @@ import { TokenBlacklist } from 'smp-core-auth';
 @Module({})
 export class CoreAuthModule {
   static forRoot(config: AuthConfig): DynamicModule {
-    // Provider for token blacklist (in-memory; consider using Redis in production)
-    const tokenBlacklistProvider = {
-      provide: TokenBlacklist,
-      useClass: TokenBlacklist,
-    };
-
-    // Provider for TokenService – uses configuration and the token blacklist.
-    const tokenServiceProvider = {
-      provide: TokenService,
-      useFactory: (tokenBlacklist: TokenBlacklist) => new TokenService(config, tokenBlacklist),
-      inject: [TokenBlacklist],
-    };
-
-    // Provider for CacheService – use Redis if cache configuration is provided, otherwise fall back to in-memory.
-    const cacheServiceProvider = {
-      provide: CacheService,
-      useFactory: () => {
-        if (config.cache && config.cache.host && config.cache.port) {
-          return new CacheService(config.cache);
-        }
-        return new CacheService();
-      },
-    };
-
-
+ 
     // // Provider for GrpcService – use Redis if cache configuration is provided, otherwise fall back to in-memory.
     // const grpcServiceProvider = {
     //   provide: GRPCService,
@@ -93,10 +69,7 @@ export class CoreAuthModule {
 
     return {
       module: CoreAuthModule,
-      providers: [
-        tokenBlacklistProvider,
-        tokenServiceProvider,
-        cacheServiceProvider,
+      providers: [ 
         localAuthProviderProvider,
         authServiceProvider,
       ],
