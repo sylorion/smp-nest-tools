@@ -1,7 +1,7 @@
 {
-  "name": "smp-nest-auth",
+  "name": "smp-nest-tool",
   "version": "1.0.0",
-  "description": "NestJS oriented authentication service for SMP",
+  "description": "NestJS oriented tools to build services for SMP",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "type": "module",
@@ -19,12 +19,16 @@
   "dependencies": {
     "@grpc/grpc-js": "^1.8.13",
     "@grpc/proto-loader": "^0.6.4",
+    "@nestjs/cache-manager": "^3.0.0",
     "@nestjs/common": "^11.0.11",
+    "@nestjs/config": "^4.0.1",
     "@nestjs/graphql": "^13.0.3",
     "@nestjs/microservices": "^11.0.11",
     "amqplib": "^0.10.5",
     "axios": "^1.8.1",
     "bcrypt": "^5.1.1",
+    "cache-manager": "^6.4.1",
+    "cache-manager-redis-store": "^3.0.1",
     "express": "^4.21.2",
     "ioredis": "^5.0.0",
     "jsonwebtoken": "^9.0.2",
@@ -43,7 +47,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/sylorion/smp-nest-auth.git"
+    "url": "git+https://github.com/sylorion/smp-nest-tools.git"
   },
   "keywords": [
     "Generator",
@@ -61,9 +65,9 @@
   "author": "Sylorion",
   "license": "Copyright 2025 Sylorion",
   "bugs": {
-    "url": "https://github.com/sylorion/smp-nest-auth/issues"
+    "url": "https://github.com/sylorion/smp-nest-tools/issues"
   },
-  "homepage": "https://github.com/sylorion/smp-nest-auth#readme",
+  "homepage": "https://github.com/sylorion/smp-nest-tools#readme",
   "engines": {
     "node": ">=14.0.0"
   }

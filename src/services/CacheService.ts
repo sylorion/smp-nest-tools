@@ -1,59 +1,56 @@
-// services/CacheService.ts
+// services/CacheService.ts 
+import { Injectable, Inject } from '@nestjs/common'; 
+import { Cache } from 'cache-manager';
+import { MEMORY_CACHE, REDIS_CACHE } from '../cacher/cache.constants.js';
+// Les tokens d’injection pour différencier le cache mémoire et le cache Redis
 
-import { Redis } from 'ioredis';
-
-/**
- * CacheService provides a unified interface for caching,
- * using Redis if configuration is provided, or an in-memory Map otherwise.
- */
+@Injectable()
 export class CacheService {
-  private redisClient?: Redis;
-  private inMemoryCache: Map<string, any>;
+  public isMemoryCacheFirst = true;
+  public isMemoryCacheEnabled = true;
+  public isRedisCacheEnabled = true;
+  constructor(
+    @Inject(MEMORY_CACHE)
+    private readonly memoryCache: Cache, // TTL court
 
-  constructor(config?: { host: string; port: number; password?: string }) {
-    if (config && config.host && config.port) {
-      this.redisClient = new Redis({
-        host: config.host,
-        port: config.port,
-        password: config.password,
-      });
+    @Inject(REDIS_CACHE)
+    private readonly redisCache: Cache, // TTL long
+  ) {}
+
+  async get<T>(key: string): Promise<T | null> {
+    // 1) On tente la mémoire
+    const memoryVal: T | null = await this.memoryCache.get<T>(key);
+    if (memoryVal !== null) {
+      return memoryVal;
     }
-    this.inMemoryCache = new Map<string, any>();
+    // 2) Sinon on tente Redis
+    const redisVal: T | null = await this.redisCache.get<T>(key);
+    if (redisVal !== null && redisVal !== null) {
+      // On met à jour le cache mémoire pour la prochaine fois
+      await this.memoryCache.set(key, redisVal);
+      return redisVal;
+    }
+    return null;
   }
 
-  /**
-   * Stores a value with an optional TTL (in seconds).
-   */
-  async set(key: string, value: any, ttlSeconds?: number): Promise<void> {
-    if (this.redisClient) {
-      await this.redisClient.set(key, JSON.stringify({...value, ttl: ttlSeconds}));
+  async set<T>(key: string, value: T, ttlSeconds?: number) {
+    // On écrit dans le cache mémoire
+    await this.memoryCache.set(key, value, ttlSeconds ? ttlSeconds : undefined);
+    // On écrit aussi dans Redis si besoin
+    if (ttlSeconds) {
+      await this.redisCache.set(key, value, ttlSeconds );
     } else {
-      this.inMemoryCache.set(key, value);
-      if (ttlSeconds) {
-        setTimeout(() => this.inMemoryCache.delete(key), ttlSeconds * 1000);
-      }
+      await this.redisCache.set(key, value);
     }
   }
 
-  /**
-   * Retrieves a value from the cache.
-   */
-  async get(key: string): Promise<any> {
-    if (this.redisClient) {
-      const result = await this.redisClient.get(key);
-      return result ? JSON.parse(result) : null;
-    }
-    return this.inMemoryCache.get(key);
+  async del(key: string) {
+    await this.memoryCache.del(key);
+    await this.redisCache.del(key);
   }
 
-  /**
-   * Deletes a key from the cache.
-   */
-  async delete(key: string): Promise<void> {
-    if (this.redisClient) {
-      await this.redisClient.del(key);
-    } else {
-      this.inMemoryCache.delete(key);
-    }
+  async reset() {
+    await this.memoryCache.clear();
+    await this.redisCache.clear();
   }
 }
