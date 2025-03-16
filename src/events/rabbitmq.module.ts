@@ -2,9 +2,7 @@
 import { Module } from '@nestjs/common';
 
 import { ClientsModule, Transport } from '@nestjs/microservices';
-import { rabbitMQConfig } from '../config/rabbitmq.config.js';
-import { RabbitMQService } from './rabbitmq.publisher.js';
-
+import { rabbitMQConfig } from '../config/rabbitmq.config.js'; 
 const rbmq = ClientsModule.register([
       {
         name: rabbitMQConfig.name,
@@ -21,7 +19,7 @@ const rbmq = ClientsModule.register([
   imports: [
     rbmq,
   ],
-  providers: [RabbitMQService],
-  exports: [RabbitMQService, ClientsModule],
+  providers: [],
+  exports: [ ClientsModule],
 })
 export class RabbitMQModule {}
