@@ -13,3 +13,4 @@ export * from './cache/memory-cache.module.js';
 export * from './cache/redis-cache.module.js';
 export * from './services/CacheService.js';
 export * from './cache/cache.constants.js';
+export { default as cacheConfig } from './config/cache.conf.js';
