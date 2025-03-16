@@ -33,15 +33,19 @@ export class CacheService {
     return null;
   }
 
-  async set<T>(key: string, value: T, ttlSeconds?: number) {
+  async setDistinct<T>(key: string, value: T, ttlSecondsShort?: number, ttlSecondsLongTerms?: number) {
     // On écrit dans le cache mémoire
-    await this.memoryCache.set(key, value, ttlSeconds ? ttlSeconds : undefined);
+    await this.memoryCache.set(key, value, ttlSecondsShort ? ttlSecondsShort : undefined);
     // On écrit aussi dans Redis si besoin
-    if (ttlSeconds) {
-      await this.redisCache.set(key, value, ttlSeconds );
+    if (ttlSecondsLongTerms) {
+      await this.redisCache.set(key, value, ttlSecondsLongTerms );
     } else {
       await this.redisCache.set(key, value);
     }
+  }
+
+  async set<T>(key: string, value: T, ttlSeconds?: number) {
+    this.setDistinct(key, value, ttlSeconds, ttlSeconds);
   }
 
   async del(key: string) {
