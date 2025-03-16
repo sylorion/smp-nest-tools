@@ -19,13 +19,13 @@ import { MEMORY_CACHE_MANAGER } from './cache.constants.js';
       inject: [ConfigService],
     }),
   ],
-  providers: [],
-  exports: [
+  providers: [
     {
       provide: MEMORY_CACHE_MANAGER,
       useExisting: CACHE_MANAGER,
     },
   ],
+  exports: [ MEMORY_CACHE_MANAGER ],
 })
 export class MemoryCacheModule {}
 

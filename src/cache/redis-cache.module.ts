@@ -22,12 +22,10 @@ import { REDIS_CACHE_MANAGER } from './cache.constants.js';
       inject: [ConfigService],
     }),
   ],
-  providers: [],
-  exports: [
-    {
+  providers: [{
       provide: REDIS_CACHE_MANAGER,
       useExisting: CACHE_MANAGER,
-    },
-  ],
+    },],
+  exports: [ REDIS_CACHE_MANAGER],
 })
 export class RedisCacheModule {}
