@@ -26,7 +26,7 @@ export function expressAuthMiddleware(tokenService: TokenService): (req: Request
       }
 
       const token = parts[1];
-      const payload = tokenService.validateAccessToken(token);
+      const payload = tokenService.verifyAccessToken(token);
       // Attach payload (e.g., user data) to the request object
       (req as any).user = payload;
       next();

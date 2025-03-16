@@ -36,7 +36,7 @@ export function grpcAuthInterceptor<T>(
       }
       const token = parts[1];
       // Validate token and attach payload to the request.
-      const payload = tokenService.validateAccessToken(token);
+      const payload = tokenService.verifyAccessToken(token);
       (call.request as any).user = payload;
     } catch (error) {
       console.error("gRPC auth interceptor error:", error);

@@ -30,7 +30,7 @@ export async function apolloAuthMiddleware(
     if (parts.length === 2 && parts[0].toLowerCase() === 'bearer') {
       const token = parts[1];
       try {
-        const payload = tokenService.validateAccessToken(token);
+        const payload = tokenService.verifyAccessToken(token);
         return { user: payload };
       } catch (error) {
         throw new Error(

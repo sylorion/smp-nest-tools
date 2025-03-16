@@ -33,7 +33,7 @@ export class RabbitMqAuthInterceptor implements NestInterceptor {
       const token = parts[1];
       try {
         // Validate the token using the injected TokenService.
-        const payload = await this.tokenService.validateAccessToken(token);
+        const payload = await this.tokenService.verifyAccessToken(token);
         // Attach the validated user payload to the message for downstream handlers.
         (message as any).user = payload;
       } catch (err) {

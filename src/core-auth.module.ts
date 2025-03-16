@@ -4,9 +4,9 @@ import { Module, DynamicModule, Global } from '@nestjs/common';
 import { AuthConfig } from 'smp-core-auth';
 import { TokenService } from 'smp-core-auth';
 import { CacheService } from 'smp-core-auth';
-import { GRPCService } from 'smp-core-auth';
-import { AuthService } from 'smp-core-auth';
-import { JWTManager } from 'smp-core-auth';
+// import { GRPCService } from 'smp-core-auth';
+// import { AuthService } from 'smp-core-auth';
+// import { JWTManager } from 'smp-core-auth';
 
 /**
  * CoreAuthModule integrates the core authentication library into a NestJS application.
@@ -55,25 +55,25 @@ export class CoreAuthModule {
       },
     };
 
-    // Provider for AuthService – orchestrates the authentication flow.
-    const authServiceProvider = {
-      provide: AuthService,
-      useFactory: (
-        tokenService: TokenService,
-        cacheService: CacheService,
-        grpcService: GRPCService,
-        localAuthProvider: any,
-      ) => new AuthService({tokenService, cacheService, grpcService, localAuthProvider}),
-      inject: [TokenService, CacheService, GRPCService, 'LocalAuthProvider'],
-    };
+    // // Provider for AuthService – orchestrates the authentication flow.
+    // const authServiceProvider = {
+    //   provide: AuthService,
+    //   useFactory: (
+    //     tokenService: TokenService,
+    //     cacheService: CacheService,
+    //     grpcService: GRPCService,
+    //     localAuthProvider: any,
+    //   ) => new AuthService({tokenService, cacheService, grpcService, localAuthProvider}),
+    //   inject: [TokenService, CacheService, GRPCService, 'LocalAuthProvider'],
+    // };
 
     return {
       module: CoreAuthModule,
       providers: [ 
         localAuthProviderProvider,
-        authServiceProvider,
+        // authServiceProvider,
       ],
-      exports: [TokenService, CacheService, AuthService],
+      exports: [TokenService, CacheService],
     };
   }
 }
