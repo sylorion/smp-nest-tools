@@ -1,7 +1,7 @@
 // services/CacheService.ts 
 import { Injectable, Inject } from '@nestjs/common'; 
 import { Cache } from 'cache-manager';
-import { MEMORY_CACHE, REDIS_CACHE } from '../cacher/cache.constants.js';
+import { MEMORY_CACHE, REDIS_CACHE } from '../cache/cache.constants.js';
 // Les tokens d’injection pour différencier le cache mémoire et le cache Redis
 
 @Injectable()
