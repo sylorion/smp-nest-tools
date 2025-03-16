@@ -19,7 +19,7 @@ export * from './cache/cache.constants.js';
 import { NestFactory } from '@nestjs/core';
 export { default as cacheConfig } from './config/cache.conf.js';
 
-const main = async (AppModule: any, grpcOptions: any | null, rabbitMQConfig: any | null): Promise<void> => {
+const mainModuleFunction = async (AppModule: any, grpcOptions: any | null, rabbitMQConfig: any | null): Promise<void> => {
   async function bootstrap() {
   const logger = new Logger('Bootstrap');
   const app = await NestFactory.create(AppModule,
@@ -51,3 +51,5 @@ const main = async (AppModule: any, grpcOptions: any | null, rabbitMQConfig: any
 }
 bootstrap();
 }
+
+export { mainModuleFunction };
