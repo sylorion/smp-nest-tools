@@ -4,7 +4,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { Logger } from './logger/custom-logger.service.js';
 
 export * from './core-auth.module.js';
-
+export * from './logger/custom-logger.service.js';
+export * from './events/rabbitmq.module.js';
+export * from './config/rabbitmq.config.js';
 export * from './services/JwtAuthGuard.js';
 export * from './services/GRPCService.js';
 export * from './interceptors/grpc.interceptor.js';
