@@ -29,3 +29,5 @@ import { REDIS_CACHE_MANAGER } from './cache.constants.js';
   exports: [ REDIS_CACHE_MANAGER],
 })
 export class RedisCacheModule {}
+const config = new ConfigService();
+console.log('RedisCacheModule', config.get('cache.redis'));

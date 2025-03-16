@@ -28,4 +28,5 @@ import { MEMORY_CACHE_MANAGER } from './cache.constants.js';
   exports: [ MEMORY_CACHE_MANAGER ],
 })
 export class MemoryCacheModule {}
-
+const config = new ConfigService();
+console.log('MemoryCacheModule', config.get('cache.memory'));

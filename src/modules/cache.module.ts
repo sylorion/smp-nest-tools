@@ -21,5 +21,6 @@ import { MEMORY_CACHE, MEMORY_CACHE_MANAGER, REDIS_CACHE, REDIS_CACHE_MANAGER } 
     CacheService],
   exports: [CacheService, cacheConfig],
 })
+console.log('cacheConfig', cacheConfig);
 export class SMPCacheModule {}
 
