@@ -11,7 +11,7 @@ import { MEMORY_CACHE, MEMORY_CACHE_MANAGER, REDIS_CACHE, REDIS_CACHE_MANAGER } 
 @Module({
   imports: [MemoryCacheModule, RedisCacheModule],
   providers: [CacheService],
-  exports: [CacheService],
+  exports: [CacheService, cacheConfig],
 })
 export class SMPCacheModule {}
 
