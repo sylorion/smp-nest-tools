@@ -1,7 +1,7 @@
 // src/cache/cache.module.ts
 
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import cacheConfig from './../config/cache.conf.js';
 import { MemoryCacheModule } from '../cache/memory-cache.module.js';
 import { RedisCacheModule } from '../cache/redis-cache.module.js';
@@ -10,7 +10,8 @@ import { MEMORY_CACHE, MEMORY_CACHE_MANAGER, REDIS_CACHE, REDIS_CACHE_MANAGER } 
 
 @Module({
   imports: [MemoryCacheModule, RedisCacheModule],
-  providers: [    {
+  providers: [
+    {
       provide: MEMORY_CACHE,
       useExisting: MEMORY_CACHE_MANAGER,
     },
@@ -19,7 +20,7 @@ import { MEMORY_CACHE, MEMORY_CACHE_MANAGER, REDIS_CACHE, REDIS_CACHE_MANAGER } 
       useExisting: REDIS_CACHE_MANAGER,
     },
     CacheService],
-  exports: [CacheService, cacheConfig],
+  exports: [CacheService, ConfigService, MEMORY_CACHE, REDIS_CACHE],
 })
 export class SMPCacheModule {}
 console.log('cacheConfig', cacheConfig);

@@ -1,15 +1,18 @@
 // src/cache/redis-cache.module.ts
 
 import { Module } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
+import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 import { CacheModule, CACHE_MANAGER } from '@nestjs/cache-manager';
 import { REDIS_CACHE_MANAGER } from './cache.constants.js';
-
+import confService from './../config/cache.conf.js';
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      load: [confService],
+    }),
     CacheModule.registerAsync({
-      isGlobal: false,
+      isGlobal: true,
       useFactory: (config: ConfigService) => {
         const redisConfig = config.get('cache.redis');
         return {
@@ -18,16 +21,13 @@ import { REDIS_CACHE_MANAGER } from './cache.constants.js';
           port: redisConfig.port,
           ttl: redisConfig.ttl,
         };
-      },
-      inject: [ConfigService],
+      }, 
     }),
   ],
   providers: [{
       provide: REDIS_CACHE_MANAGER,
       useExisting: CACHE_MANAGER,
-    },],
+    }, ConfigService ],
   exports: [ REDIS_CACHE_MANAGER],
 })
-export class RedisCacheModule {}
-const config = new ConfigService();
-console.log('RedisCacheModule', config.get('cache.redis'));
+export class RedisCacheModule {} 
