@@ -14,7 +14,7 @@ import { MEMORY_CACHE_MANAGER } from './cache.constants.js';
     CacheModule.registerAsync({
       isGlobal: true,
       useFactory: (config: ConfigService) => {
-        const memoryConfig = config.get('cache.memory');
+        const memoryConfig = confService().memory;
         return {
           ttl: memoryConfig.ttl,  // en secondes
           max: memoryConfig.max,  // nombre d’entrées max

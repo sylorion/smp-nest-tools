@@ -14,7 +14,7 @@ import confService from './../config/cache.conf.js';
     CacheModule.registerAsync({
       isGlobal: true,
       useFactory: (config: ConfigService) => {
-        const redisConfig = config.get('cache.redis');
+        const redisConfig = confService().redis;
         return {
           store: redisStore as unknown,
           host: redisConfig.host,
