@@ -19,7 +19,9 @@ import { MEMORY_CACHE, MEMORY_CACHE_MANAGER, REDIS_CACHE, REDIS_CACHE_MANAGER } 
       provide: REDIS_CACHE,
       useExisting: REDIS_CACHE_MANAGER,
     },
-    CacheService],
+    CacheService,
+  ConfigService,
+],
   exports: [CacheService, ConfigService, MEMORY_CACHE, REDIS_CACHE],
 })
 export class SMPCacheModule {}
