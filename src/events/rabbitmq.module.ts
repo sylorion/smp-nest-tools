@@ -1,25 +1,16 @@
-    // rabbitmq.module.ts
+// rabbitmq.module.ts
 import { Module } from '@nestjs/common';
-
-import { ClientsModule, Transport } from '@nestjs/microservices';
-import { rabbitMQConfig } from '../config/rabbitmq.config.js'; 
-const rbmq = ClientsModule.register([
-      {
-        name: rabbitMQConfig.name,
-        transport: Transport.RMQ,
-        options: {
-          urls: rabbitMQConfig.urls,
-          queue: rabbitMQConfig.queue,
-          queueOptions: rabbitMQConfig.queueOptions,
-        },
-      },
-    ]);
+import { ClientsModule } from '@nestjs/microservices';
+import { rabbitMqClient } from '../config/rabbitmq.client.js';
 
 @Module({
-  imports: [
-    rbmq,
+  imports: [],
+  providers: [
+    {
+      provide: 'RABBITMQ_CLIENT',
+      useValue: rabbitMqClient,
+    },
   ],
-  providers: [],
-  exports: [ ClientsModule],
+  exports: ['RABBITMQ_CLIENT'],
 })
 export class RabbitMQModule {}

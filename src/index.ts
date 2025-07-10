@@ -19,7 +19,28 @@ export * from './cache/redis-cache.module.js';
 export * from './services/CacheService.js';
 export * from './cache/cache.constants.js';
 import { NestFactory } from '@nestjs/core';
+import * as fs from 'fs';
 export { default as cacheConfig } from './config/cache.conf.js';
+
+function requiredEnv(name: string): string {
+    const value = process.env[name];
+    if (!value) {
+      throw new Error(`Missing required environment variable: ${name}`);
+    }
+    return value;
+  }
+
+const isSecureEnv = ['production', 'prod', 'staging'].includes(process.env.NODE_ENV ?? '');
+
+  const httpsOptions = isSecureEnv
+    ? {
+        key: fs.readFileSync(requiredEnv('KEY_PATH')),
+        cert: fs.readFileSync(requiredEnv('CERT_PATH')),
+        ca: fs.readFileSync(requiredEnv('CA_PATH')),
+        requestCert: true,
+        rejectUnauthorized: true,
+      }
+    : undefined;
 
 const mainModuleFunction = async (AppModule: any, grpcOptions: any | null, rabbitMQConfig: any | null): Promise<void> => {
   async function bootstrap() {
@@ -27,6 +48,7 @@ const mainModuleFunction = async (AppModule: any, grpcOptions: any | null, rabbi
   const app = await NestFactory.create(AppModule,
    {
     rawBody: true,
+    ...(httpsOptions ? { httpsOptions } : {}),
    });
 
 

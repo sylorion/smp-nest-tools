@@ -5,7 +5,11 @@ const amqPass = process.env.RABBITMQ_PASS || 'guest';
 const amqHost = process.env.RABBITMQ_HOST || 'dev-rabbitmq.sh1.hidora.net';
 const amqPort = process.env.RABBITMQ_PORT || '5672';
 const amqVhost = process.env.RABBITMQ_VHOST || '/';
-const amqUrl = `amqp://${amqUser}:${amqPass}@${amqHost}:${amqPort}`;
+
+const isSecureEnv = ['production', 'prod', 'staging'].includes(process.env.NODE_ENV ?? '');
+const amqUrl = isSecureEnv?`amqps://${amqUser}:${amqPass}@${amqHost}:${amqPort}`:`amqp://${amqUser}:${amqPass}@${amqHost}:${amqPort}`;
+
+
 export const rabbitMQConfig = {
   name: process.env.RABBITMQ_MODULE_NAME || 'NO_RMQ_SERVICE_DEFINED',
   urls: [amqUrl],
